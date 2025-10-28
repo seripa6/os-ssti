@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>OS - SSTI</title>
+    <link rel="stylesheet" href="os.css">
+</head>
+
+<body>
+    <a href="os.html">OS</a>
+
+    <div class="container bordaForm"style="color: red; font-weight: bold;">Em caso de arquivo com informação sigilosa colocar na pasta:
+        \\truenas\ADM\20 -
+        INFORMÁTICA( Gráfica)\00 - DEMANDAS PENDENTES </div>
+
+    <div class="container">
+        <form id="formOS" enctype="multipart/form-data">
+
+            <!-- Valores da planilha (L3 e M3) -->
+            <div style="display: none;" class="valoresPlanilha" style="margin-top:20px;">
+                <p>L3: <span id="valorL3"></span></p>
+            </div>
+
+            <!-- Numero do chamado calculado -->
+            <div class="linha bordaForm">
+                <div>Número Chamado:</div>
+                <div id="numeroChamado"></div>
+            </div>
+
+            <div class="bordaForm">
+                <label for="nome">Nome de Guerra:</label>
+                <input type="text" name="nome" id="nome" required>
+            </div>
+
+            <div class="bordaForm">
+                <label for="posto">Posto/Graduação:</label>
+                <select name="posto" id="posto" required>
+                    <option value="" disabled selected>Selecione um posto/graduação</option>
+                    <option value="Ten Cel">Tenente-Coronel</option>
+                    <option value="Maj">Major</option>
+                    <option value="Cap">Capitão</option>
+                    <option value="1º Ten">Primeiro-Tenente</option>
+                    <option value="2º Ten">Segundo-Tenente</option>
+                    <option value="Asp">Aspirante-a-Oficial</option>
+                    <option value="SO">Suboficial</option>
+                    <option value="1º SGT">Primeiro-Sargento</option>
+                    <option value="2º SGT">Segundo-Sargento</option>
+                    <option value="3º SGT">Terceiro-Sargento</option>
+                    <option value="CB">Cabo</option>
+                    <option value="SD">Soldado</option>
+                </select>
+            </div>
+
+            <div class="bordaForm">
+                <label for="motivo">Motivo:</label>
+                <select name="motivo" id="motivo" required onchange="checkOutro()">
+                    <option value="" disabled selected>Selecione um motivo</option>
+                    <option value="Sem Conexão com Rede">Sem Conexão com Rede</option>
+                    <option value="Computador Não Liga">Computador Não Liga</option>
+                    <option value="Criação Atualização de Usuário">Criação/Atualização de Usuário</option>
+                    <option value="Uso de Auditório Equipamentos">Uso de Auditório / Equipamentos</option>
+                    <option value="Inserção Manutenção de Site">Inserção / Manutenção de Site</option>
+                    <option value="Manutenção Atualização de Rede ou Computador">Manutenção / Atualização de Rede ou
+                        Computador</option>
+                    <option value="Outro">Outro</option>
+                </select>
+                <input type="text" name="outroMotivo" id="outroMotivo" placeholder="Descreva o motivo"
+                    style="display:none; margin-top:5px;">
+            </div>
+
+            <div class="bordaForm">
+                <label for="arquivo">Arquivo Opcional (imagem ou PDF):</label>
+                <input type="file" name="arquivo" id="arquivo">
+            </div>
+
+            <button type="submit">ENVIAR</button>
+        </form>
+    </div>
+
+    <script src="os.js"></script>
+</body>
+
+</html>

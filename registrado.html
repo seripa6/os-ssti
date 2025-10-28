@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Registrado</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: #f0f2f5;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            margin: 0;
+        }
+
+        .nav-buttons {
+            display: flex;
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+
+        .nav-buttons button {
+            background: #007bff;
+            color: #fff;
+            border: none;
+            padding: 12px 25px;
+            border-radius: 8px;
+            font-size: 16px;
+            cursor: pointer;
+            transition: background 0.3s, transform 0.2s;
+        }
+
+        .nav-buttons button:hover {
+            background: #0056b3;
+            transform: translateY(-2px);
+        }
+
+        .container {
+            background: #fff;
+            padding: 30px 40px;
+            border-radius: 10px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+            text-align: center;
+            max-width: 400px;
+            width: 90%;
+        }
+
+        h1 {
+            color: #333;
+        }
+
+        .status {
+            margin-top: 20px;
+            font-size: 18px;
+            color: #555;
+        }
+
+        .numero-chamado {
+            font-weight: bold;
+            color: #007bff;
+        }
+
+        .valor-m3 {
+            font-weight: bold;
+            color: #28a745;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="nav-buttons">
+        <button onclick="window.location.href='os.html'">OS</button>
+    </div>
+
+    <div class="container">
+        <h1>Registrado com sucesso!</h1>
+        <p class="status">
+            Em caso de consultar informar o número do chamado Nº:<span class="numero-chamado" id="valorL3">0000</span>.<br>
+        </p>
+    </div>
+
+    <script>
+        const sheetId = "1XOYUgRgRPgN82-j_mabDaoLz68gRKt--IbJUjz0l4C4";
+        const aba = "registros";
+
+        function buscarCelula(celula, callback) {
+            const url = `https://docs.google.com/spreadsheets/d/${sheetId}/gviz/tq?tqx=out:json&sheet=${aba}&range=${celula}`;
+            fetch(url)
+                .then(res => res.text())
+                .then(text => {
+                    const json = JSON.parse(text.substr(47).slice(0, -2));
+                    const valor = json.table.rows[0]?.c[0]?.v || "—";
+                    callback(valor);
+                })
+                .catch(() => callback("—"));
+        }
+
+        function atualizarValores() {
+            buscarCelula("L3", valorL3 => {
+                const spanL3 = document.getElementById("valorL3");
+                let numero = parseInt(valorL3, 10) || 0;
+                let ano = new Date().getFullYear();
+                spanL3.textContent = `${numero.toString().padStart(4, "0")}/${ano}`;
+            });
+
+            buscarCelula("M3", valorM3 => {
+                document.getElementById("valorM3").textContent = valorM3;
+            });
+        }
+
+        document.addEventListener("DOMContentLoaded", atualizarValores);
+    </script>
+</body>
+
+</html>
