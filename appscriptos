@@ -1,0 +1,54 @@
+const PLANILHA_ID = "1XOYUgRgRPgN82-j_mabDaoLz68gRKt--IbJUjz0l4C4"; 
+const NOME_ABA = "registros"; 
+const PASTA_ID = "1F8hBYQ_uxuqbMH6VJ2dcqe9NZwHkdxZ_";
+
+function doPost(e) {
+  try {
+    const ss = SpreadsheetApp.openById(PLANILHA_ID);
+    const ws = ss.getSheetByName(NOME_ABA);
+    const dados = e.parameter;
+    const dataHora = new Date();
+
+    let nomeArquivo = "";
+    let linkArquivo = "";
+
+    if (dados.arquivo && dados.nomeArquivo) {
+      const bytes = Utilities.base64Decode(dados.arquivo);
+      const blob = Utilities.newBlob(bytes, dados.tipoArquivo || MimeType.PDF, dados.nomeArquivo);
+      const pasta = DriveApp.getFolderById(PASTA_ID);
+      const arquivoSalvo = pasta.createFile(blob);
+      nomeArquivo = arquivoSalvo.getName();
+      linkArquivo = arquivoSalvo.getUrl();
+    }
+
+    // ✅ Inserir numeroChamado enviado pelo JS
+    ws.appendRow([
+      dataHora,
+      dados.numeroChamado || "",
+      dados.nome || "",
+      dados.posto || "",
+      dados.motivo || "",
+      dados.outroMotivo || "",
+      nomeArquivo,
+      linkArquivo
+    ]);
+
+    return ContentService
+      .createTextOutput(JSON.stringify({ status: "sucesso", nomeArquivo, linkArquivo }))
+      .setMimeType(ContentService.MimeType.JSON)
+      .setHeader("Access-Control-Allow-Origin", "*");
+
+  } catch (err) {
+    return ContentService
+      .createTextOutput(JSON.stringify({ status: "erro", mensagem: err.message }))
+      .setMimeType(ContentService.MimeType.JSON)
+      .setHeader("Access-Control-Allow-Origin", "*");
+  }
+}
+
+function doGet(e) {
+  return ContentService
+    .createTextOutput("Método GET não permitido")
+    .setMimeType(ContentService.MimeType.TEXT)
+    .setHeader("Access-Control-Allow-Origin", "*");
+}
